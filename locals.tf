@@ -1,5 +1,5 @@
 locals {
-  name            = basename(path.cwd)
+  name            = "eks-blueprint-poc"
   region          = data.aws_region.current.name
   cluster_version = "1.23"
 
@@ -22,8 +22,14 @@ locals {
   # ARGOCD WORKLOAD APPLICATION
   #---------------------------------------------------------------
 
-  workload_application = {
+  workload_application_dev = {
     path               = "envs/dev"
+    repo_url           = "https://github.com/danieleszekimck/eks-blueprints-workloads.git"
+    add_on_application = false
+  }
+
+    workload_application_test = {
+    path               = "envs/test"
     repo_url           = "https://github.com/danieleszekimck/eks-blueprints-workloads.git"
     add_on_application = false
   }

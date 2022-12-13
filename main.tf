@@ -60,32 +60,6 @@ module "eks_blueprints" {
       ]
     }
   }
-
-  application_teams = {
-    team-riker = {
-      "labels" = {
-        "appName"     = "riker-team-app",
-        "projectName" = "project-riker",
-        "environment" = "dev",
-        "domain"      = "example",
-        "uuid"        = "example",
-        "billingCode" = "example",
-        "branch"      = "example"
-      }
-      "quota" = {
-        "requests.cpu"    = "1000m",
-        "requests.memory" = "2Gi",
-        "limits.cpu"      = "2000m",
-        "limits.memory"   = "5Gi",
-        "pods"            = "15",
-        "secrets"         = "10",
-        "services"        = "10"
-      }
-      ## Manifests Example: we can specify a directory with kubernetes manifests that can be automatically applied in the team-riker namespace.
-      manifests_dir = "./kubernetes/team-riker"
-      users         = [data.aws_caller_identity.current.arn]
-    }
-  }
 }
 
 
@@ -140,7 +114,8 @@ module "kubernetes_addons" {
 
   argocd_applications = {
     addons    = local.addon_application
-    workloads = local.workload_application
+    workloads-dev = local.workload_application_dev
+    workloads-test = local.workload_application_test
   }
 
   argocd_helm_config = {
@@ -163,6 +138,6 @@ module "kubernetes_addons" {
   enable_amazon_eks_aws_ebs_csi_driver = true
   enable_aws_for_fluentbit             = true
   enable_metrics_server                = true
-
+  enable_argo_rollouts                 = true
 }
 
